@@ -1,12 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+// import './App.css';
+import React from "react";
+import MyMap from "./components/MyMap";
 
 function App() {
-  return (
-    <div className="App">
-      Hello React!
-    </div>
-  );
+  return <MyMap />;
 }
 
 export default App;
