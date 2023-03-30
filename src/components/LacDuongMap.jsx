@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { MapContainer, GeoJSON } from "react-leaflet";
-import mapData from "./../data/countries.json";
+import mapData from "./../data/huyenlacduong.json";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 
-class MyMap extends Component {
+class LacDuongMap extends Component {
   state = { color: "#ffff00" };
 
   colors = ["green", "blue", "yellow", "orange", "grey"];
@@ -53,8 +53,12 @@ class MyMap extends Component {
   render() {
     return (
       <div>
-        <h1 style={{ textAlign: "center" }}>Bản đồ thành phố Đà Lạt</h1>
-        <MapContainer style={{ height: "90vh", width:"auto" }} zoom={12} center={[11.937937736511287, 108.435295104980412]}>
+        <h1 style={{ textAlign: "center" }}>Bản đồ huyện Lạc Dương</h1>
+        <MapContainer
+          style={{ height: "90vh", width: "auto" }}
+          zoom={11}
+          center={[12.126253406842906, 108.55943680481168]}
+        >
           <GeoJSON
             style={this.countryStyle}
             data={mapData.features}
@@ -71,4 +75,4 @@ class MyMap extends Component {
   }
 }
 
-export default MyMap;
+export default LacDuongMap;

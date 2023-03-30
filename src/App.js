@@ -2,9 +2,10 @@
 // import './App.css';
 import React from "react";
 import MyMap from "./components/MyMap";
+import LacDuongMap from "./components/LacDuongMap";
 
 function App() {
-  return <MyMap />;
+  return <LacDuongMap />;
 }
 
 export default App;
