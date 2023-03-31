@@ -33,13 +33,13 @@ class LacDuongMap extends Component {
   };
 
   onEachCountry = (country, layer) => {
-    const countryName = country.properties.Name_0;
+    const countryName = country.properties.NAME_4;
     console.log(countryName);
     layer.bindPopup(countryName);
 
     layer.options.fillOpacity = Math.random(); //0-1 (0.1, 0.2, 0.3)
-    // const colorIndex = Math.floor(Math.random() * this.colors.length);
-    // layer.options.fillColor = this.colors[colorIndex]; //0
+     const colorIndex = Math.floor(Math.random() * this.colors.length);
+     layer.options.fillColor = this.colors[colorIndex]; //0
 
     layer.on({
       click: this.changeCountryColor,
