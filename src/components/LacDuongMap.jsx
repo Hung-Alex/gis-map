@@ -34,9 +34,10 @@ class LacDuongMap extends Component {
   };
 
   onEachCountry = (country, layer) => {
-    const countryName = country.properties.NAME_4;
-    console.log(countryName);
-    layer.bindPopup(countryName);
+    const countryName = country.properties.NAME_4; // lấy tên của xã
+    console.log(countryName); // log ra dãy tên xã bên console
+    layer.bindTooltip(countryName, { className: "my-tooltip" });
+
     // xử lý màu sắc random
     layer.options.fillOpacity = Math.random(); //0-1 (0.1, 0.2, 0.3)
     const colorIndex = Math.floor(Math.random() * this.colors.length);
@@ -83,7 +84,7 @@ class LacDuongMap extends Component {
           />
           <GeoJSON
             style={this.countryStyle}
-            data={mapData.features}
+            data={mapData}
             onEachFeature={this.onEachCountry}
           />
           {/* hiển thị vị trí phân bố */}

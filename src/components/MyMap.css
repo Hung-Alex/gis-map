@@ -1,6 +1,12 @@
 body {
-    background-color: #61BA9E;
+  background-color: #61ba9e;
 }
 .leaflet-container {
-    background-color:#61BA9E;
+  background-color: #61ba9e;
+}
+.my-tooltip {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  padding: 5px;
 }
