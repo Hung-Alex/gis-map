@@ -7,8 +7,17 @@ import "./MyMap.css";
 import iconLocation from "./images/location.png";
 
 class LacDuongMap extends Component {
-  state = { color: "#91C788" };
-  colors = ["red", "blue", "yellow", "orange", "grey", "pink"];
+  state = { color: "#9f224e" };
+  // colors = ["#49932e", "#77ac50", "#98bf6c", "#6ec1c6", "#2d4c47", "#3e8e2f"];
+  colors = ["red", "blue", "yellow", "orange", "white", "pink"];
+  townColor = {
+    "Đạ Chais": "#49932e",
+    "Đạ Nhim": "#77ac50",
+    "Đạ Sar": "#98bf6c",
+    "Đưng K'Nớ": "#6ec1c6",
+    "TT. Lạc Dương": "#2d4c47",
+    "Xã Lát": "#3e8e2f",
+  };
 
   componentDidMount() {
     console.log(mapData);
@@ -16,7 +25,7 @@ class LacDuongMap extends Component {
 
   countryStyle = {
     fillColor: "red",
-    fillOpacity: 1,
+    fillOpacity: 0.5,
     color: "black",
     weight: 2,
   };
@@ -27,22 +36,23 @@ class LacDuongMap extends Component {
 
   changeCountryColor = (event) => {
     event.target.setStyle({
-      color: "green",
+      color: "#2e394f",
       fillColor: this.state.color,
-      fillOpacity: 2,
+      fillOpacity: 1, // 0 hoặc 1
     });
   };
 
   onEachCountry = (country, layer) => {
-    const countryName = country.properties.NAME_4; // lấy tên của xã
-    console.log(countryName); // log ra dãy tên xã bên console
-    layer.bindTooltip(countryName, { className: "my-tooltip" });
+    const townName = country.properties.NAME_4; // lấy tên của xã, thị trấn
+    console.log(townName); // log ra dãy tên xã bên console
+    layer.bindTooltip(townName, { className: "my-tooltip" });
 
     // xử lý màu sắc random
-    layer.options.fillOpacity = Math.random(); //0-1 (0.1, 0.2, 0.3)
-    const colorIndex = Math.floor(Math.random() * this.colors.length);
-    layer.options.fillColor = this.colors[colorIndex]; //0
+    // layer.options.fillOpacity = Math.random(); //0-1 (0.1, 0.2, 0.3)// random độ mờ
+    // const colorIndex = Math.floor(Math.random() * this.colors.length);
 
+    // end xử lý màu sắc random
+    layer.options.fillColor = this.townColor[townName]; //0
     layer.on({
       click: this.changeCountryColor,
     });
