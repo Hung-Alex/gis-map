@@ -97,48 +97,50 @@ class LacDuongMap extends Component {
       },
     ];
     return (
-      <div>
-        <h1 className="text-center">Bản đồ huyện Lạc Dương</h1>
-        <MapContainer
-          style={{ height: "90vh", width: "auto" }}
-          zoom={11}
-          center={center}
-          minZoom={11}
-          maxZoom={11} // khóa thu phóng
-          dragging={false} // khóa không cho di chuyển
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <GeoJSON
-            style={this.countryStyle}
-            data={mapData}
-            onEachFeature={this.onEachCountry}
-          />
-          {/* hiển thị vị trí phân bố */}
-          {positions.map(({ coords, content }, index) => (
-            <Marker
-              key={index}
-              position={coords}
-              icon={
-                new L.Icon({
-                  iconUrl: iconLocation,
-                  iconSize: [41, 41], // size
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                })
-              }
-            >
-              <Popup>
-                <span>Vị trí phần bố: {index + 1}</span>
-                <br />
-                {content}
-              </Popup>
-            </Marker>
-            /* end vị trí phân bố */
-          ))}
-        </MapContainer>
+      <div className="container-fluid text-center bg-light">
+        <h1>Bản đồ huyện Lạc Dương</h1>
+        <div className="text-center">
+          <MapContainer
+            style={{ height: "90vh", width: "auto" }}
+            zoom={11}
+            center={center}
+            minZoom={11}
+            maxZoom={11} // khóa thu phóng
+            // dragging={false} // khóa không cho di chuyển
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <GeoJSON
+              style={this.countryStyle}
+              data={mapData}
+              onEachFeature={this.onEachCountry}
+            />
+            {/* hiển thị vị trí phân bố */}
+            {positions.map(({ coords, content }, index) => (
+              <Marker
+                key={index}
+                position={coords}
+                icon={
+                  new L.Icon({
+                    iconUrl: iconLocation,
+                    iconSize: [41, 41], // size
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                  })
+                }
+              >
+                <Popup>
+                  <span>Vị trí phần bố: {index + 1}</span>
+                  <br />
+                  {content}
+                </Popup>
+              </Marker>
+              /* end vị trí phân bố */
+            ))}
+          </MapContainer>
+        </div>
         <input
           type="color"
           value={this.state.color}
