@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { MapContainer, GeoJSON, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import "bootstrap/dist/css/bootstrap.min.css";
 import mapData from "./../data/huyenlacduong.json";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
@@ -63,7 +64,7 @@ class LacDuongMap extends Component {
   };
 
   render() {
-    const center = [12.126253406842906, 108.55943680481168];
+    const center = [12.140721657691136, 108.54228437271122];
     // dữ liệu ảo
     const positions = [
       {
@@ -97,11 +98,14 @@ class LacDuongMap extends Component {
     ];
     return (
       <div>
-        <h1 style={{ textAlign: "center" }}>Bản đồ huyện Lạc Dương</h1>
+        <h1 className="text-center">Bản đồ huyện Lạc Dương</h1>
         <MapContainer
           style={{ height: "90vh", width: "auto" }}
           zoom={11}
           center={center}
+          minZoom={11}
+          maxZoom={11} // khóa thu phóng
+          dragging={false} // khóa không cho di chuyển
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
