@@ -1,24 +1,35 @@
-@import url('https://fonts.googleapis.com/css?family=Arapey|Cantarell|Comfortaa|Khand|Russo+One|Ubuntu');
+@import url("https://fonts.googleapis.com/css?family=Arapey|Cantarell|Comfortaa|Khand|Russo+One|Ubuntu");
 
 body {
   background-color: #61ba9e;
 }
+
 .leaflet-container {
   background-color: #61ba9e;
 }
+
 .my-tooltip {
   font-weight: bold;
-  font-family: 'Comfortaa', cursive;
+  font-family: "Comfortaa", cursive;
   background-color: #333;
-  color: #E086D3;
+  color: #e086d3;
   padding: 5px;
   border-radius: 9px;
   box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
   font-size: 16px;
 }
-.sidebarCss{
+
+.sidebarCss {
   position: absolute;
   top: 50%;
   margin-left: 5%;
   z-index: 1000;
+}
+
+.sidebarCss a {
+color: black;
+}
+
+.sidebarCss a:hover {
+  background-color: #61ba9e;
 }

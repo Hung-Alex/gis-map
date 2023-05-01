@@ -1,11 +1,16 @@
+/*
+package: https://www.npmjs.com/package/react-leaflet-heatmap-layer-v3
+*/
 import React, { Component } from "react";
 import { MapContainer, GeoJSON, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "bootstrap/dist/css/bootstrap.min.css";
-import mapData from "./../data/huyenlacduong.json";
+import mapData from "../data/huyenlacduong.json";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 import iconLocation from "./images/location.png";
+import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
+import { addressPoints } from "../data/PlantData/rose.js";
 
 class LacDuongMap extends Component {
   state = { color: "#9f224e" };
@@ -96,6 +101,20 @@ class LacDuongMap extends Component {
         content: "Đạ Nhim 2, Lạc Dương, Lâm Đồng.",
       },
     ];
+
+    // const options = {
+    //   radius: 30,
+    //   blur: 15,
+    //   maxZoom: 11,
+    //   gradient: {
+    //     0.2: "#ffe1e1",
+    //     0.4: "#ffd2d2",
+    //     0.6: "#ffc3c3",
+    //     0.8: "white",
+    //     1.0: "#E56AB3",
+    //   },
+    // };
+
     return (
       <div className="container-fluid text-center bg-light">
         <h1>Bản đồ huyện Lạc Dương</h1>
@@ -160,6 +179,15 @@ class LacDuongMap extends Component {
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <HeatmapLayer
+              points={addressPoints}
+              longitudeExtractor={(point) => point[1]}
+              latitudeExtractor={(point) => point[0]}
+              intensityExtractor={(point) => point[2]}
+              blur={15} // độ mờ của điểm dữ liệu trên bản đồ
+              radius={20} // bán kính của vùng
+              // {...options}
             />
             <GeoJSON
               style={this.countryStyle}
