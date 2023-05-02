@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Navbar = () => {
     return (
@@ -8,48 +8,23 @@ const Navbar = () => {
                     <div className="sidebar-sticky">
                         <ul className="nav flex-column">
                             <li className="nav-item">
-                                <a
-                                    className="nav-link active"
-                                    href="https://github.com/quanghuybest2k2/PetShop"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    Nông hộ
-                                </a>
+                                <button className='btn btn-primary mt-3' onClick={() => alert('hoa hong')}>Hoa hồng</button>
                             </li>
                             <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href="https://github.com/quanghuybest2k2/PetShop"
-                                    rel="noopener noreferrer"
-                                >
-                                    Nông sản
-                                </a>
+                                <button className='btn btn-primary mt-3' onClick={() => alert('chuoi')}>Chuối</button>
                             </li>
                             <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href="https://github.com/quanghuybest2k2/PetShop"
-                                    rel="noopener noreferrer"
-                                >
-                                    Bổ sung 1
-                                </a>
+                                <button className='btn btn-primary mt-3' onClick={() => alert('Hoa Hướng Dương')}>Hoa Hướng Dương</button>
                             </li>
                             <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href="https://github.com/quanghuybest2k2/PetShop"
-                                    rel="noopener noreferrer"
-                                >
-                                    Bổ sung 2
-                                </a>
+                                <button className='btn btn-primary mt-3' onClick={() => alert('Cá tầm')}>Cá Tầm</button>
                             </li>
                         </ul>
                     </div>
                 </nav>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
-export default Navbar
+export default Navbar;

@@ -25,11 +25,3 @@ body {
   margin-left: 5%;
   z-index: 1000;
 }
-
-.sidebarCss a {
-color: black;
-}
-
-.sidebarCss a:hover {
-  background-color: #61ba9e;
-}

@@ -10,11 +10,16 @@ import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 import iconLocation from "./images/location.png";
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
-import { plantPoints } from "../data/PlantData/rose.js";
-// import { bananaPoints } from "../data/PlantData/banana.js";
-import Navbar from "./Layout/Navbar";
+import { plantPoints } from "../data/PlantData/plant.js";
+// import Navbar from "./Layout/Navbar";
 
 class LacDuongMap extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      plantType: "all",
+    };
+  }
   state = { color: "#9f224e" };
   // colors = ["#49932e", "#77ac50", "#98bf6c", "#6ec1c6", "#2d4c47", "#3e8e2f"];
   colors = ["red", "blue", "yellow", "orange", "white", "pink"];
@@ -54,10 +59,6 @@ class LacDuongMap extends Component {
     const townName = country.properties.NAME_4; // lấy tên của xã, thị trấn
     console.log(townName); // log ra dãy tên xã bên console
     layer.bindTooltip(townName, { className: "my-tooltip" });
-
-    // xử lý màu sắc random
-    // layer.options.fillOpacity = Math.random(); //0-1 (0.1, 0.2, 0.3)// random độ mờ
-    // const colorIndex = Math.floor(Math.random() * this.colors.length);
 
     // end xử lý màu sắc random
     layer.options.fillColor = this.townColor[townName]; //0
@@ -104,12 +105,55 @@ class LacDuongMap extends Component {
       },
     ];
 
+    const rosePoints = plantPoints.filter((point) => point.type === "rose");
+    // rosePoints.forEach((point) => {
+    //   console.log(point.coordinates);
+    // });
+    const bananaPoints = plantPoints.filter((point) => point.type === "banana");
+
+    const fishPoints = plantPoints.filter((point) => point.type === "fish");
+
+    const points =
+      this.state.plantType === "all"
+        ? plantPoints
+        : this.state.plantType === "rose"
+        ? rosePoints
+        : this.state.plantType === "fish"
+        ? fishPoints
+        : bananaPoints;
+
     return (
       <div className="container-fluid text-center bg-light">
-        <h1>Bản đồ huyện Lạc Dương</h1>
+        <h3>Bản đồ huyện Lạc Dương</h3>
         <div className="text-center">
           {/* navbar */}
-          <Navbar />
+          {/* <Navbar /> */}
+          <div>
+            <button
+              className="btn btn-primary btn-sm me-3 mb-1"
+              onClick={() => this.setState({ plantType: "all" })}
+            >
+              Tất cả
+            </button>
+            <button
+              className="btn btn-danger btn-sm me-3 mb-1"
+              onClick={() => this.setState({ plantType: "rose" })}
+            >
+              Hoa Hồng
+            </button>
+            <button
+              className="btn btn-warning btn-sm me-3 mb-1"
+              onClick={() => this.setState({ plantType: "banana" })}
+            >
+              Chuối
+            </button>
+            <button
+              className="btn btn-success btn-sm me-3 mb-1"
+              onClick={() => this.setState({ plantType: "fish" })}
+            >
+              Cá Tầm
+            </button>
+          </div>
           {/* end navbar */}
           <MapContainer
             style={{ height: "90vh", width: "auto" }}
@@ -124,10 +168,12 @@ class LacDuongMap extends Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <HeatmapLayer
-              points={plantPoints.map((point) => ({
+              // fitBoundsOnLoad
+              // fitBoundsOnUpdate
+              points={points.map((point) => ({
                 lat: point.coordinates[0], // vĩ độ
                 lng: point.coordinates[1], // kinh độ
-                value: point.color,
+                value: point.type,
               }))}
               longitudeExtractor={(m) => m.lng}
               latitudeExtractor={(m) => m.lat}
@@ -136,13 +182,6 @@ class LacDuongMap extends Component {
               // max={1.0}
               blur={15} // độ mờ của điểm dữ liệu trên bản đồ
               radius={20} // bán kính của vùng
-              // gradient={{
-              //   0.4: "blue",
-              //   0.6: "cyan",
-              //   0.7: "lime",
-              //   0.8: "yellow",
-              //   1.0: "red",
-              // }}
             />
             <GeoJSON
               style={this.countryStyle}
@@ -173,11 +212,11 @@ class LacDuongMap extends Component {
             ))}
           </MapContainer>
         </div>
-        <input
+        {/* <input
           type="color"
           value={this.state.color}
           onChange={this.colorChange}
-        />
+        /> */}
       </div>
     );
   }
