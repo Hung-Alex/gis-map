@@ -10,7 +10,9 @@ import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 import iconLocation from "./images/location.png";
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
-import { addressPoints } from "../data/PlantData/rose.js";
+import { plantPoints } from "../data/PlantData/rose.js";
+// import { bananaPoints } from "../data/PlantData/banana.js";
+import Navbar from "./Layout/Navbar";
 
 class LacDuongMap extends Component {
   state = { color: "#9f224e" };
@@ -102,71 +104,12 @@ class LacDuongMap extends Component {
       },
     ];
 
-    // const options = {
-    //   radius: 30,
-    //   blur: 15,
-    //   maxZoom: 11,
-    //   gradient: {
-    //     0.2: "#ffe1e1",
-    //     0.4: "#ffd2d2",
-    //     0.6: "#ffc3c3",
-    //     0.8: "white",
-    //     1.0: "#E56AB3",
-    //   },
-    // };
-
     return (
       <div className="container-fluid text-center bg-light">
         <h1>Bản đồ huyện Lạc Dương</h1>
         <div className="text-center">
           {/* navbar */}
-          <div className="container-fluid sidebarCss">
-            <div className="row">
-              <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                <div className="sidebar-sticky">
-                  <ul className="nav flex-column">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        href="https://github.com/quanghuybest2k2/PetShop"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Nông hộ
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        href="https://github.com/quanghuybest2k2/PetShop"
-                        rel="noopener noreferrer"
-                      >
-                        Nông sản
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        href="https://github.com/quanghuybest2k2/PetShop"
-                        rel="noopener noreferrer"
-                      >
-                        Bổ sung 1
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        href="https://github.com/quanghuybest2k2/PetShop"
-                        rel="noopener noreferrer"
-                      >
-                        Bổ sung 2
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
-            </div>
-          </div>
+          <Navbar />
           {/* end navbar */}
           <MapContainer
             style={{ height: "90vh", width: "auto" }}
@@ -181,13 +124,25 @@ class LacDuongMap extends Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <HeatmapLayer
-              points={addressPoints}
-              longitudeExtractor={(point) => point[1]}
-              latitudeExtractor={(point) => point[0]}
-              intensityExtractor={(point) => point[2]}
+              points={plantPoints.map((point) => ({
+                lat: point.coordinates[0], // vĩ độ
+                lng: point.coordinates[1], // kinh độ
+                value: point.color,
+              }))}
+              longitudeExtractor={(m) => m.lng}
+              latitudeExtractor={(m) => m.lat}
+              intensityExtractor={(m) => m.value}
+              maxZoom={11}
+              // max={1.0}
               blur={15} // độ mờ của điểm dữ liệu trên bản đồ
               radius={20} // bán kính của vùng
-              // {...options}
+              // gradient={{
+              //   0.4: "blue",
+              //   0.6: "cyan",
+              //   0.7: "lime",
+              //   0.8: "yellow",
+              //   1.0: "red",
+              // }}
             />
             <GeoJSON
               style={this.countryStyle}
