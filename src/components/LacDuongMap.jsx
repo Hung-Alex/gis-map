@@ -11,6 +11,9 @@ import "./MyMap.css";
 import iconLocation from "./images/location.png";
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 import { plantPoints } from "../data/PlantData/plant.js";
+import SlideBarMenu from "./Layout/SlideBarMenu";
+import Control from "react-leaflet-custom-control";
+import { categoriesTree } from "../data/PlantData/Category";
 // import Navbar from "./Layout/Navbar";
 
 class LacDuongMap extends Component {
@@ -122,9 +125,11 @@ class LacDuongMap extends Component {
         ? fishPoints
         : bananaPoints;
 
+        console.log(  categoriesTree)
     return (
       <div className="container-fluid text-center bg-light">
         <h3>Bản đồ huyện Lạc Dương</h3>
+        
         <div className="text-center">
           {/* navbar */}
           {/* <Navbar /> */}
@@ -210,6 +215,11 @@ class LacDuongMap extends Component {
               </Marker>
               /* end vị trí phân bố */
             ))}
+            <Control prepend position="topleft">
+             
+              <SlideBarMenu data={categoriesTree}/>
+            </Control>
+
           </MapContainer>
         </div>
         {/* <input
