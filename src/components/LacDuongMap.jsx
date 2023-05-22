@@ -125,11 +125,11 @@ class LacDuongMap extends Component {
         ? fishPoints
         : bananaPoints;
 
-        console.log(  categoriesTree)
+    console.log(categoriesTree);
     return (
       <div className="container-fluid text-center bg-light">
         <h3>Bản đồ huyện Lạc Dương</h3>
-        
+
         <div className="text-center">
           {/* navbar */}
           {/* <Navbar /> */}
@@ -216,10 +216,8 @@ class LacDuongMap extends Component {
               /* end vị trí phân bố */
             ))}
             <Control prepend position="topleft">
-             
-              <SlideBarMenu data={categoriesTree}/>
+              <SlideBarMenu data={categoriesTree} />
             </Control>
-
           </MapContainer>
         </div>
         {/* <input
