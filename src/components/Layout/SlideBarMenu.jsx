@@ -3,13 +3,29 @@ import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
+import { getCategories } from "../../Services/CategoryService";
+import { Category } from "@mui/icons-material";
 
 class SlideBarMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpen: false,
+      Category:[],
     };
+  }
+
+  componentDidMount() {
+
+    getCategories().then(data=>{
+      if(data){
+         this.setState({Category:data.categoriesTree})
+          
+      }else{
+        this.setState({Category:[]})
+      }
+  })
+    
   }
 
   CreateTree = (tree) => {
@@ -31,7 +47,7 @@ class SlideBarMenu extends Component {
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
       >
-        {this.CreateTree(data)}
+        {this.CreateTree(this.state.Category)}
       </TreeView>
     );
   }

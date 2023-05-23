@@ -36,8 +36,14 @@ class LacDuongMap extends Component {
   };
 
   componentDidMount() {
+
     console.log(mapData);
+    
   }
+
+  
+
+
 
   countryStyle = {
     fillColor: "red",
