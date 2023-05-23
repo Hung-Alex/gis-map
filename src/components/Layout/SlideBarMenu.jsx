@@ -12,6 +12,7 @@ class SlideBarMenu extends Component {
     this.state = {
       isOpen: false,
       Category:[],
+      Varities:[],
     };
   }
 
@@ -20,9 +21,11 @@ class SlideBarMenu extends Component {
     getCategories().then(data=>{
       if(data){
          this.setState({Category:data.categoriesTree})
+         this.setState({Varities:data.varieties})
           
       }else{
         this.setState({Category:[]})
+        this.setState({Varities:[]})
       }
   })
     
@@ -32,16 +35,23 @@ class SlideBarMenu extends Component {
     if (!tree || tree.length === 0) {
       return null;
     }
-
-    return tree.map((item) => (
-      <TreeItem key={item.id} nodeId={item.id} label={item.name}>
-        {this.CreateTree(item.children)}
+    const varities = (itemid) => this.state.Varities.filter(x => x.category_id === itemid);
+    return tree.map((item) => {
+      const children = this.CreateTree(item.children);
+      const filteredVarities = varities(item.id);
+      
+      return (
+        <TreeItem key={item.id} nodeId={item.id} label={item.name}>
+        {children}
+        {filteredVarities.map((variety) => (
+          <TreeItem key={variety.id} nodeId={variety.id} label={variety.name} />
+        ))}
       </TreeItem>
-    ));
+      );
+    });
   };
 
   render() {
-    const { data } = this.props;
     return (
       <TreeView
         defaultCollapseIcon={<ExpandMoreIcon />}
