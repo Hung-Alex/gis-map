@@ -1,3 +1,5 @@
+// http://159.223.22.242:8855/swagger/index.html
+// https://www.npmjs.com/package/react-leaflet-heatmap-layer-v3
 import React, { useState, useEffect } from "react";
 import { MapContainer, GeoJSON, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -10,7 +12,7 @@ import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 import { plantPoints } from "../data/PlantData/plant.js";
 import SlideBarMenu from "./Layout/SlideBarMenu";
 import Control from "react-leaflet-custom-control";
-import { categoriesTree } from "../data/PlantData/Category";
+// import { categoriesTree } from "../data/PlantData/Category";
 
 const LacDuongMap = () => {
   const [plantType, setPlantType] = useState("all");
@@ -187,7 +189,7 @@ const LacDuongMap = () => {
             </Marker>
           ))}
           <Control prepend position="topleft">
-            <SlideBarMenu data={categoriesTree} />
+            <SlideBarMenu />
           </Control>
         </MapContainer>
       </div>

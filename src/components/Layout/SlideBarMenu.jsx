@@ -64,15 +64,9 @@ const SlideBarMenu = () => {
       const selectedParent = selectedNodes[parentIndex];
       const selectedChildren = selectedParent.children;
 
-      console.log('Thông tin node Cha:', selectedParent.id);
-     
-      selectedChildren.map((item,index)=>{
-        console.log('Thông tin node con của nó:', item.id);
-        item.children.map((item,index)=>{
-        console.log('Thông tin node con của nua:', item.id);
+      console.log("Thông tin node Cha:", selectedParent.id);
+      console.log("Thông tin node Con:", nodeId);
 
-        })
-      })
       const childIndex = selectedChildren.findIndex(
         (child) => child.id === nodeId
       );
@@ -124,7 +118,7 @@ const SlideBarMenu = () => {
                   )
                 }
                 onChange={(event) =>
-                  handleCheckboxChange(event, item.id, item.id)
+                  handleCheckboxChange(event, item.id, item.parentId)
                 }
               />
               {item.name}
@@ -151,31 +145,7 @@ const SlideBarMenu = () => {
                   {variety.name}
                 </div>
               }
-            >
-              {variety.children.map((child) => (
-                <TreeItem
-                  key={child.id}
-                  nodeId={child.id}
-                  label={
-                    <div>
-                      <Checkbox
-                        checked={selectedNodes.some(
-                          (node) =>
-                            node.id === variety.id &&
-                            node.children.some(
-                              (grandchild) => grandchild.id === child.id
-                            )
-                        )}
-                        onChange={(event) =>
-                          handleCheckboxChange(event, child.id, variety.id)
-                        }
-                      />
-                      {child.name}
-                    </div>
-                  }
-                />
-              ))}
-            </TreeItem>
+            ></TreeItem>
           ))}
         </TreeItem>
       );
