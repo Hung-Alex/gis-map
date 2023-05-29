@@ -43,10 +43,10 @@ const LacDuongMap = () => {
 
         console.error(error);
       });
-	console.log(menu);
+    console.log(menu);
   };
   const countryStyle = {
-   // fillColor: "blue",
+    // fillColor: "blue",
     fillOpacity: 0.5,
     color: "black",
     weight: 2,
@@ -115,9 +115,6 @@ const LacDuongMap = () => {
   const bananaPoints = plantPoints.filter((point) => point.type === "banana");
   const fishPoints = plantPoints.filter((point) => point.type === "fish");
 
- 
-
-
   useEffect(() => {
     getCategories().then((data) => {
       if (data) {
@@ -162,7 +159,6 @@ const LacDuongMap = () => {
   };
   return (
     <div className="text-center bg-light">
-     
       <h3 className="title">Bản đồ huyện Lạc Dương</h3>
       <Box
         className="content"
@@ -199,7 +195,8 @@ const LacDuongMap = () => {
               points={plantpointsmap.map((point) => ({
                 lat: point.location.lat,
                 lng: point.location.long,
-                value: "rose",
+                value: "banana",
+                
               }))}
               longitudeExtractor={(m) => m.lng}
               latitudeExtractor={(m) => m.lat}
@@ -234,76 +231,11 @@ const LacDuongMap = () => {
               </Marker>
             ))}
             <Control position="bottomright">
-			<button onClick={loadLocation}>find</button>
-			</Control>
+              <button onClick={loadLocation}>find</button>
+            </Control>
           </MapContainer>
         </Box>
       </Box>
-      {/* <div className="text-center">
-				<MapContainer
-					style={{ height: "90vh", width: "auto" }}
-					zoom={11}
-					center={center}
-					minZoom={11}
-					maxZoom={11}
-				>
-					<TileLayer
-						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-					/>
-
-					<HeatmapLayer
-						points={points.map((point) => ({
-							lat: point.coordinates[0],
-							lng: point.coordinates[1],
-							value: point.type,
-						}))}
-						longitudeExtractor={(m) => m.lng}
-						latitudeExtractor={(m) => m.lat}
-						intensityExtractor={(m) => m.value}
-						maxZoom={11}
-						blur={15}
-						radius={20}
-					/>
-					<GeoJSON
-						style={countryStyle}
-						data={mapData}
-						onEachFeature={onEachCountry}
-					/>
-					{positions.map(({ coords, content }, index) => (
-						<Marker
-							key={index}
-							position={coords}
-							icon={
-								new L.Icon({
-									iconUrl: iconLocation,
-									iconSize: [41, 41],
-									iconAnchor: [12, 41],
-									popupAnchor: [1, -34],
-								})
-							}
-						>
-							<Popup>
-								<span>Vị trí phần bố: {index + 1}</span>
-								<br />
-								{content}
-							</Popup>
-						</Marker>
-					))}
-					<Control position="topleft">
-						<CusTreeView
-							nodes={menu.treeCategory}
-							checked={menu.categoriesSelected}
-							setChecked={handleCheckCategories}
-						/>
-						<CusTreeView
-							nodes={menu.treePlace}
-							checked={menu.placesSelected}
-							setChecked={handleCheckPlace}
-						/>
-					</Control>
-				</MapContainer>
-			</div> */}
     </div>
   );
 };

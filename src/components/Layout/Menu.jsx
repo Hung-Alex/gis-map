@@ -27,7 +27,7 @@ const MenuBar = () => {
 		<div className="menu-bar">
 			<div>
 				<PlaceBarMenu />
-				<input onClick={}> tim kiem</input>
+				
 			</div>
 		</div>
 	);
