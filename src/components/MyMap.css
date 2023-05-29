@@ -45,7 +45,7 @@ body {
 
 .controls-box {
   flex: 1;
-  background-color: red;
+  background-color: green !important;
 }
 
 .map-box {

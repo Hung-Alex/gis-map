@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { menuSelect as menu } from "../../utils/menu";
 import PlaceBarMenu from "./PaceMenu";
+import { Input } from "@mui/material";
+import { getLocations } from "../../Services/CategoryService";
+
 
 const MenuBar = () => {
-	const [menu, setMenu] = useState(menuSelect);
-
+	
 	useEffect(() => {
 		getCategories().then((data) => {
 			if (data) {
@@ -25,6 +27,7 @@ const MenuBar = () => {
 		<div className="menu-bar">
 			<div>
 				<PlaceBarMenu />
+				<input onClick={}> tim kiem</input>
 			</div>
 		</div>
 	);
