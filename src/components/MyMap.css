@@ -1,22 +1,37 @@
 @import url("https://fonts.googleapis.com/css?family=Arapey|Cantarell|Comfortaa|Khand|Russo+One|Ubuntu");
 
 body {
-  background-color: #61ba9e;
+  background-color: #ffffff;
 }
 
 .leaflet-container {
-  background-color: #61ba9e;
+  background-color: #ffffff;
 }
+
+.leaflet-interactive {
+  outline: none;
+}
+
+.leaflet-interactive:hover {
+  fill: #9ad11b1c;
+}
+/* .leaflet-interactive:hover {
+  fill: #f0f8fc;
+} */
 
 .my-tooltip {
   font-weight: bold;
   font-family: "Comfortaa", cursive;
-  background-color: #333;
-  color: #e086d3;
-  padding: 5px;
-  border-radius: 9px;
-  box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
   font-size: 16px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+  border-radius: 5px;
+}
+
+.my-tooltip::before {
+  display: none;
 }
 
 .sidebarCss {
@@ -24,6 +39,15 @@ body {
   top: 50%;
   margin-left: 5%;
   z-index: 1000;
+}
+
+.controls-item {
+  margin-bottom: 10px;
+}
+
+.controls-item h6 {
+  padding: 0 15px;
+  text-align: left;
 }
 
 .title {
@@ -45,9 +69,138 @@ body {
 
 .controls-box {
   flex: 1;
-  background-color: red;
+  background-color: white;
+  padding-top: 70px;
+  padding-right: 0;
+  box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 }
 
 .map-box {
-  flex: 5;
+  position: relative;
+  flex: 4;
+}
+.disable-all{
+  pointer-events: none;
+}
+
+.map-box .map {
+  position: relative;
+  z-index: 10;
+}
+
+.map-box .area-box {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  height: auto;
+  z-index: 11;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+  border-radius: 5px;
+}
+
+.map-box .area-box p {
+  margin: 0;
+}
+
+.rct-node-leaf {
+  margin-left: 10px;
+}
+
+.MuiButtonBase-root.tab-title {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: #333;
+}
+
+.MuiButtonBase-root.tab-title.Mui-selected {
+  color: #208F1F;
+  transition: linear 0.2s;
+}
+
+.MuiTabs-indicator.css-1aquho2-MuiTabs-indicator {
+  background-color: #208F1F;
+}
+
+.MuiTabPanel-root.tab-panel {
+  padding: 15px 0;
+}
+
+.leaflet-top.leaflet-left .leaflet-control-zoom.leaflet-bar.leaflet-control {
+  display: none;
+}
+
+.rct-checkbox[aria-checked="true"] svg {
+  color: #208F1F;
+}
+
+.rct-checkbox[aria-checked="true"] + span {
+  color: #208F1F;
+}
+
+.rct-collapse, .rct-checkbox, .rct-node-icon {
+  padding: 0;
+}
+
+.btn-clear {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-check-all {
+  color: #208F1F;
+  cursor: pointer;
+}
+
+h6 {
+  text-align: left;
+}
+
+.select-box {
+  text-align: left;
+}
+
+.menu-btn {
+  position: absolute;
+  top: 6px;
+  left: 20px;
+  z-index: 11;
+  outline: none;
+  background: none;
+  border: none;  
+  display: none;
+}
+
+@media only screen and (max-width: 1200px) {
+  .map-box {
+    flex: 2.5;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+  
+  .controls-box {
+    position: absolute;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    z-index: 12;
+    transition: ease-in-out 0.4s;
+  }
+
+  .controls-box.show-menu {
+    left: 0;    
+  }
+}
+
+@media only screen and (max-width: 480px) {
+
 }

@@ -6,8 +6,10 @@ export const menu = {
 
 	listPlace: [],
 	treePlace: [],
+};
 
-	categoriesSelected: [],
+export const selected = {
+	typePlaceSelected: "*",
 	varietiesSelected: [],
 	placesSelected: [],
 };
