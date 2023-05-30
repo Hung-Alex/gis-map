@@ -11,7 +11,7 @@ import UnfoldLessOutlinedIcon from "@mui/icons-material/UnfoldLessOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import OpenInFullOutlinedIcon from "@mui/icons-material/OpenInFullOutlined";
 const CusTreeView = (props) => {
-	const { nodes, checked, setChecked } = props;
+	const { nodes, checked, setChecked, checkModel = "leaf" } = props;
 	const [expanded, setExpanded] = useState([]);
 
 	const onCheck = (newChecked) => {
@@ -30,6 +30,7 @@ const CusTreeView = (props) => {
 			onCheck={onCheck}
 			onExpand={onExpand}
 			showNodeIcon={false}
+			checkModel={checkModel}
 			icons={{
 				check: <CheckBoxOutlinedIcon className="rct-icon rct-icon-check" />,
 				uncheck: <CropSquareIcon className="rct-icon rct-icon-uncheck" />,

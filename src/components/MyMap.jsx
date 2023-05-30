@@ -54,7 +54,7 @@ class MyMap extends Component {
 		return (
 			<div>
 				<h1 style={{ textAlign: "center" }}>Bản đồ thành phố Đà Lạt</h1>
-	
+
 				<MapContainer
 					style={{ height: "90vh", width: "auto" }}
 					zoom={12}
