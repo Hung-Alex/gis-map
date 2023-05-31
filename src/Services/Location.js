@@ -7,7 +7,7 @@ export async function getLocation(category, varities) {
       varietyIds: varities,
     };
     const response = await axios.post(
-      "http://159.223.22.242:8855/api/v1/dist/",
+      "http://159.223.22.242:8857/api/v1/dist/",
       param,
       {
         headers: {
