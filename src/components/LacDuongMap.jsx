@@ -310,6 +310,21 @@ const LacDuongMap = () => {
               gap: 1,
             }}
           >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Chọn loại bản đồ
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={5}
+                label="Age"
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Bản đồ nhiệt</MenuItem>
+                <MenuItem value={20}>Bản đồ phân bố</MenuItem>
+              </Select>
+            </FormControl>
             <FormControlLabel
               label="Chọn tất cả"
               control={
@@ -414,6 +429,11 @@ const LacDuongMap = () => {
             center={center}
             minZoom={9}
             maxZoom={16}
+            // giới hạn không vượt qua đường biên giới
+            maxBounds={[
+              [8.1466, 102.1446], // Tọa độ góc trên bên trái
+              [23.4215, 109.4629], // Tọa độ góc dưới bên phải
+            ]}
             scrollWheelZoozm={true}
           >
             <TileLayer
