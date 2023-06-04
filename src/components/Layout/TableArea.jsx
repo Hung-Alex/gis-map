@@ -1,0 +1,65 @@
+
+import { red } from "@mui/material/colors";
+import React from "react";
+
+
+const TableArea = () => {
+ 
+  const grades = [0, 10000, 30000, 50000, 80000, 100000, 200000, 300000, 500000];
+
+  return (
+    <div className="legend" style={{ marginTop: "50px" }}>
+      <div style={{backgroundColor:'rgba(255,255,255,0.8)',padding:'10px 50px 10px 5px ' }}>Thông tin diện tích 
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'red',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}500000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'blue',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}300000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'green',width:'20px',height:'20px',display:"block" }}></div>
+        <div> {'>   '}200000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'yellow',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}100000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'orange',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}80000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'purple',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}50000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'pink',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}30000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'gray',width:'20px',height:'20px',display:"block" }}></div>
+        <div>{'>    '}10000</div>
+      </div>
+
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'black',width:'20px',height:'20px',display:"block" }}></div>
+        <div>0</div>
+      </div>
+
+     
+      
+      </div>
+    </div>
+  );
+};
+
+export default TableArea;

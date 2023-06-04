@@ -1,6 +1,7 @@
 // http://159.223.22.242:8857/swagger/index.html
 // https://www.npmjs.com/package/react-leaflet-heatmap-layer-v3
 import React, { useState, useEffect } from "react";
+import TableArea from "./Layout/TableArea";
 import {
   MapContainer,
   GeoJSON,
@@ -34,6 +35,7 @@ import { GetDist as getDist } from "../Services/dist";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import L from "leaflet";
+import Control from "react-leaflet-custom-control";
 
 const DISTRICT = "district";
 const WARD = "ward";
@@ -91,7 +93,7 @@ const LacDuongMap = () => {
 
   const colorDisable = "black";
   const defaultStyle = {
-    fillColor: "white",
+    fillColor: "black",
     fillOpacity: 0.2,
     color: "black",
     weight: 1,
@@ -104,7 +106,7 @@ const LacDuongMap = () => {
   };
   const disableStyle = {
     fillColor: "black",
-    fillOpacity: 0.1,
+    fillOpacity: 0.2,
     color: "black",
     weight: 0.1,
   };
@@ -148,7 +150,57 @@ const LacDuongMap = () => {
     }
   }
 
-  const onPlace = (place, layer) => {
+  //======================== hiển thị mật độ diện tích theo vùng màu  của thông số diện tích ========================================
+  
+  
+  
+  function getColor(d) {
+    return d > 500000
+      ? "red"
+      : d > 300000
+      ? "blue"
+      : d > 200000
+      ? "green"
+      : d > 100000
+      ? "yellow"
+      : d > 80000
+      ? "orange"
+      : d > 50000
+      ? "purple"
+      : d > 30000
+      ? "pink"
+      : d > 10000?"gray": 
+      "green";
+  }
+
+  async function getDynamicStyle(locationId) {
+    try {
+      var result = await getDist({ varieties: selected.varietiesSelected, places: locationId.split(' ') });
+      var area = Number(result.totalArea);
+  
+      return {
+        fillColor: getColor(area),
+        weight: 2,
+        opacity: 1,
+        color: "white",
+        dashArray: "3",
+        fillOpacity: 0.7,
+      };
+    } catch (error) {
+      console.log(error);
+  
+      return {
+        fillColor: getColor(0), // Giá trị mặc định nếu có lỗi
+        weight: 2,
+        opacity: 1,
+        color: "white",
+        dashArray: "3",
+        fillOpacity: 0.7,
+      };
+    }
+  }
+  //================================================================
+  const onPlace = async (place, layer) => {
     const name = place.properties.name;
     layer.bindTooltip(name, { className: "my-tooltip" });
     layer.options.fillColor = mainMapColor;
@@ -156,21 +208,15 @@ const LacDuongMap = () => {
     layer.options.id = props.id;
     layer.options.placesSelected = selected.placesSelected;
     layer.options.itemSelected = itemsPlace;
+    
+    const dynamicStyle = await getDynamicStyle(layer.options.id);
+
     if (itemsPlace && itemsPlace.includes(props.id)) {
-      layer.options = {
-        ...layer.options,
-        ...selectedStyle,
-      };
+      layer.setStyle(selectedStyle)
     } else if (props.disabled) {
-      layer.options = {
-        ...layer.options,
-        ...disableStyle,
-      };
+      layer.setStyle(disableStyle)
     } else {
-      layer.options = {
-        ...layer.options,
-        ...defaultStyle,
-      };
+      layer.setStyle(dynamicStyle)
     }
     layer.on({
       click: handlerGetLocation,
@@ -513,6 +559,9 @@ const LacDuongMap = () => {
               onEachFeature={onPlace}
             />
             <ZoomControl position="bottomright" />
+            <Control position="topright">
+              <TableArea></TableArea>
+            </Control>
           </MapContainer>
           <Box className="area-box">
             {dist && <p>{`Diện tích nông nghiệp: ${dist.totalArea}`}</p>}
