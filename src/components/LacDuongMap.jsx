@@ -12,7 +12,8 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
-import iconLocation from "./images/location.png";
+// import locationIcon from "./images/location.png";
+import roseIcon from "./images/rose.png";
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 import CusTreeView from "./Layout/test";
 // import { categoriesTree } from "../data/PlantData/Category";
@@ -32,6 +33,7 @@ import FormControl from "@mui/material/FormControl";
 import { GetDist as getDist } from "../Services/dist";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Checkbox, FormControlLabel } from "@mui/material";
+import L from "leaflet";
 
 const DISTRICT = "district";
 const WARD = "ward";
@@ -53,7 +55,12 @@ const LacDuongMap = () => {
   const [value, setValue] = useState("1");
   const [dist, setDist] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [mapType, setMapType] = useState(20);
 
+  // chọn loại bản đồ
+  const handleChangeMapType = (event) => {
+    setMapType(event.target.value);
+  };
   const handleCheckAll = () => {
     setIsLoadAll((pre) => !pre);
   };
@@ -317,12 +324,12 @@ const LacDuongMap = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={5}
+                value={mapType}
                 label="Age"
-                onChange={handleChange}
+                onChange={handleChangeMapType}
               >
-                <MenuItem value={10}>Bản đồ nhiệt</MenuItem>
-                <MenuItem value={20}>Bản đồ phân bố</MenuItem>
+                <MenuItem value={20}>Bản đồ nhiệt</MenuItem>
+                <MenuItem value={21}>Bản đồ phân bố</MenuItem>
               </Select>
             </FormControl>
             <FormControlLabel
@@ -440,7 +447,8 @@ const LacDuongMap = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {dist && (
+            {/* hiển thị các điểm nhiệt */}
+            {dist && mapType === 20 && (
               <HeatmapLayer
                 points={dist.points.map((point) => {
                   let location = {
@@ -457,31 +465,34 @@ const LacDuongMap = () => {
                 radius={14}
               />
             )}
+            {/* hiểu thị icon */}
+            {dist &&
+              mapType === 21 &&
+              dist.points.map((point) => {
+                let location = {
+                  lat: point.location.lat,
+                  lng: point.location.lng,
+                };
+                return (
+                  <Marker
+                    position={location}
+                    icon={
+                      new L.Icon({
+                        iconUrl: roseIcon,
+                        iconSize: [41, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                      })
+                    }
+                  />
+                );
+              })}
+
             <GeoJSON
               key={selected.typePlaceSelected}
               data={menu[selected.typePlaceSelected]}
               onEachFeature={onPlace}
             />
-            {/* {positions.map(({ coords, content }, index) => (
-								<Marker
-									key={index}
-									position={coords}
-									icon={
-										new L.Icon({
-											iconUrl: iconLocation,
-											iconSize: [41, 41],
-											iconAnchor: [12, 41],
-											popupAnchor: [1, -34],
-										})
-									}
-								>
-									<Popup>
-										<span>Vị trí phần bố: {index + 1}</span>
-										<br />
-										{content}
-									</Popup>
-								</Marker>
-            ))} */}
             <ZoomControl position="bottomright" />
           </MapContainer>
           <Box className="area-box">
