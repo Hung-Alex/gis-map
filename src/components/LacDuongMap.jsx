@@ -57,6 +57,15 @@ const LacDuongMap = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [mapType, setMapType] = useState(20);
 
+  // hiển thị icon theo từng loại
+  const createCustomIcon = (imageUrl) =>
+    new L.icon({
+      iconUrl: imageUrl,
+      iconSize: [41, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
   // chọn loại bản đồ
   const handleChangeMapType = (event) => {
     setMapType(event.target.value);
@@ -296,6 +305,8 @@ const LacDuongMap = () => {
     setShowMenu(!showMenu);
   };
 
+  // console.log(menu.treeCategory.image);
+
   return (
     <div className="text-center bg-light">
       <button className="menu-btn" onClick={handleShowMenu}>
@@ -372,6 +383,7 @@ const LacDuongMap = () => {
                   nodes={menu.treeCategory}
                   checked={selected.varietiesSelected}
                   setChecked={handleCheckCategories}
+                  // {menu.treeCategory.image}
                 />
               </TabPanel>
               <TabPanel className="tab-panel" value="2">
@@ -474,17 +486,24 @@ const LacDuongMap = () => {
                   lng: point.location.lng,
                 };
                 return (
-                  <Marker
-                    position={location}
-                    icon={
-                      new L.Icon({
-                        iconUrl: roseIcon,
-                        iconSize: [41, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34],
-                      })
-                    }
-                  />
+                  // <Marker
+                  //   position={location}
+                  //   // icon={
+                  //   //   new L.Icon({
+                  //   //     iconUrl: roseIcon,
+                  //   //     iconSize: [41, 41],
+                  //   //     iconAnchor: [12, 41],
+                  //   //     popupAnchor: [1, -34],
+                  //   //   })
+                  //   // }
+                  // />
+                  menu.treeCategory.map((item) => (
+                    <Marker
+                      key={item.id}
+                      position={location}
+                      icon={createCustomIcon(item.image)}
+                    />
+                  ))
                 );
               })}
 
