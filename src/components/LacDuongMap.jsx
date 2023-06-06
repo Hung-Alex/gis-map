@@ -169,8 +169,9 @@ const LacDuongMap = () => {
       ? "purple"
       : d > 30000
       ? "pink"
-      : d > 10000?"brown":
-      d > 1000?"#7B68EE": 
+      : d > 10000 ?"brown"
+      :d > 1000 ? "#7B68EE"
+      :d > 100 ? "#CFF5E7":  
       "gray";
   }
 
