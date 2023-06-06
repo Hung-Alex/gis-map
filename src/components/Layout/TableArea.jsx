@@ -12,42 +12,42 @@ const TableArea = () => {
       <div style={{backgroundColor:'rgba(255,255,255,0.8)',padding:'10px 50px 10px 5px ' }}>Thông tin diện tích 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'red',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}500000</div>
+        <div>{'>    '}500.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'blue',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}300000</div>
+        <div>300.000{'-'}500.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'green',width:'20px',height:'20px',display:"block" }}></div>
-        <div> {'>   '}200000</div>
+        <div> 200.000{'-'}300.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'yellow',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}100000</div>
+        <div>100.000{'-'}200.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'orange',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}80000</div>
+        <div>80.000{'-'}100.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'purple',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}50000</div>
+        <div>50.000{'-'}80.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'pink',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}30000</div>
+        <div>30.000{'-'}50.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <div style={{backgroundColor:'gray',width:'20px',height:'20px',display:"block" }}></div>
-        <div>{'>    '}10000</div>
+        <div>10.000{'-'}30.000</div>
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>

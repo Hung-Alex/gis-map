@@ -106,7 +106,7 @@ const LacDuongMap = () => {
   };
   const disableStyle = {
     fillColor: "black",
-    fillOpacity: 0.2,
+    fillOpacity: 0.4,
     color: "black",
     weight: 0.1,
   };
