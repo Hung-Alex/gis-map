@@ -208,9 +208,11 @@ const LacDuongMap = () => {
     layer.options.id = props.id;
     layer.options.placesSelected = selected.placesSelected;
     layer.options.itemSelected = itemsPlace;
+    var dynamicStyle=disableStyle;
+    if(!props.disabled) {
+      dynamicStyle = await getDynamicStyle(layer.options.id);
+    }
     
-    const dynamicStyle = await getDynamicStyle(layer.options.id);
-
     if (itemsPlace && itemsPlace.includes(props.id)) {
       layer.setStyle(selectedStyle)
     } else if (props.disabled) {
