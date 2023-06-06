@@ -46,12 +46,15 @@ const TableArea = () => {
       </div>
 
       <div style={{display:'flex',justifyContent:'space-between'}}>
-        <div style={{backgroundColor:'gray',width:'20px',height:'20px',display:"block" }}></div>
+        <div style={{backgroundColor:'brown',width:'20px',height:'20px',display:"block" }}></div>
         <div>10.000{'-'}30.000</div>
       </div>
-
       <div style={{display:'flex',justifyContent:'space-between'}}>
-        <div style={{backgroundColor:'black',width:'20px',height:'20px',display:"block" }}></div>
+        <div style={{backgroundColor:'#7B68EE',width:'20px',height:'20px',display:"block" }}></div>
+        <div>1.000{'-'}10.000</div>
+      </div>
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <div style={{backgroundColor:'gray',width:'20px',height:'20px',display:"block" }}></div>
         <div>0</div>
       </div>
 

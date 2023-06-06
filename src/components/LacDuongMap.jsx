@@ -169,8 +169,9 @@ const LacDuongMap = () => {
       ? "purple"
       : d > 30000
       ? "pink"
-      : d > 10000?"gray": 
-      "green";
+      : d > 10000?"brown":
+      d > 1000?"#7B68EE": 
+      "gray";
   }
 
   async function getDynamicStyle(locationId) {
