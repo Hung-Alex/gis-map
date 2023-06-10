@@ -59,15 +59,6 @@ const LacDuongMap = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [mapType, setMapType] = useState(20);
 
-  // hiển thị icon theo từng loại
-  const createCustomIcon = (imageUrl) =>
-    new L.icon({
-      iconUrl: imageUrl,
-      iconSize: [41, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-    });
-
   // chọn loại bản đồ
   const handleChangeMapType = (event) => {
     setMapType(event.target.value);
@@ -151,9 +142,7 @@ const LacDuongMap = () => {
   }
 
   //======================== hiển thị mật độ diện tích theo vùng màu  của thông số diện tích ========================================
-  
-  
-  
+
   function getColor(d) {
     return d > 500000
       ? "red"
@@ -169,17 +158,23 @@ const LacDuongMap = () => {
       ? "purple"
       : d > 30000
       ? "pink"
-      : d > 10000 ?"brown"
-      :d > 1000 ? "#7B68EE"
-      :d > 100 ? "#CFF5E7":  
-      "gray";
+      : d > 10000
+      ? "brown"
+      : d > 1000
+      ? "#7B68EE"
+      : d > 100
+      ? "#CFF5E7"
+      : "gray";
   }
 
   async function getDynamicStyle(locationId) {
     try {
-      var result = await getDist({ varieties: selected.varietiesSelected, places: locationId.split(' ') });
+      var result = await getDist({
+        varieties: selected.varietiesSelected,
+        places: locationId.split(" "),
+      });
       var area = Number(result.totalArea);
-  
+
       return {
         fillColor: getColor(area),
         weight: 2,
@@ -190,7 +185,7 @@ const LacDuongMap = () => {
       };
     } catch (error) {
       console.log(error);
-  
+
       return {
         fillColor: getColor(0), // Giá trị mặc định nếu có lỗi
         weight: 2,
@@ -210,17 +205,17 @@ const LacDuongMap = () => {
     layer.options.id = props.id;
     layer.options.placesSelected = selected.placesSelected;
     layer.options.itemSelected = itemsPlace;
-    var dynamicStyle=disableStyle;
-    if(!props.disabled) {
+    var dynamicStyle = disableStyle;
+    if (!props.disabled) {
       dynamicStyle = await getDynamicStyle(layer.options.id);
     }
-    
+
     if (itemsPlace && itemsPlace.includes(props.id)) {
-      layer.setStyle(selectedStyle)
+      layer.setStyle(selectedStyle);
     } else if (props.disabled) {
-      layer.setStyle(disableStyle)
+      layer.setStyle(disableStyle);
     } else {
-      layer.setStyle(dynamicStyle)
+      layer.setStyle(dynamicStyle);
     }
     layer.on({
       click: handlerGetLocation,
@@ -355,7 +350,21 @@ const LacDuongMap = () => {
     setShowMenu(!showMenu);
   };
 
-  // console.log(menu.treeCategory.image);
+  // points.varieties.id
+
+  const filterLocation =
+    dist && dist.points
+      ? dist.points
+          .filter((item) =>
+            item.varieties.some(
+              (variety) => variety.id === selected.varietiesSelected // hoa hồng
+            )
+          )
+          .map((item) => item.location)
+      : [];
+
+  console.log(filterLocation);
+  // console.log(selected.varietiesSelected);
 
   return (
     <div className="text-center bg-light">
@@ -530,33 +539,21 @@ const LacDuongMap = () => {
             {/* hiểu thị icon */}
             {dist &&
               mapType === 21 &&
-              dist.points.map((point) => {
-                let location = {
-                  lat: point.location.lat,
-                  lng: point.location.lng,
-                };
-                return (
-                  // <Marker
-                  //   position={location}
-                  //   // icon={
-                  //   //   new L.Icon({
-                  //   //     iconUrl: roseIcon,
-                  //   //     iconSize: [41, 41],
-                  //   //     iconAnchor: [12, 41],
-                  //   //     popupAnchor: [1, -34],
-                  //   //   })
-                  //   // }
-                  // />
-                  menu.treeCategory.map((item) => (
-                    <Marker
-                      key={item.id}
-                      position={location}
-                      icon={createCustomIcon(item.image)}
-                    />
-                  ))
-                );
-              })}
-
+              filterLocation.map((item, index) => (
+                <Marker
+                  key={index}
+                  position={[item.lat, item.lng]}
+                  // icon={createCustomIcon(item.image)}
+                  icon={
+                    new L.Icon({
+                      iconUrl: roseIcon,
+                      iconSize: [41, 41],
+                      iconAnchor: [12, 41],
+                      popupAnchor: [1, -34],
+                    })
+                  }
+                />
+              ))}
             <GeoJSON
               key={selected.typePlaceSelected}
               data={menu[selected.typePlaceSelected]}
