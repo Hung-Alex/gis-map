@@ -67,18 +67,19 @@ const LacDuongMap = () => {
     setIsLoadAll((pre) => !pre);
   };
   const AddPlaceSelected = (id) => {
-    setItemsPlace((pre) => {
-      let listItem = [];
-      if (pre && pre.length > 0) {
-        if (pre.includes(id)) {
-          listItem = pre.filter((item) => item !== id);
-        } else {
-          listItem = [...pre, id];
-        }
+    setSelected((prevSelected) => {
+      let newVarietiesSelected = [...prevSelected.varietiesSelected];
+      if (newVarietiesSelected.includes(id)) {
+        newVarietiesSelected = newVarietiesSelected.filter(
+          (item) => item !== id
+        );
       } else {
-        listItem = [id];
+        newVarietiesSelected.push(id);
       }
-      return listItem;
+      return {
+        ...prevSelected,
+        varietiesSelected: newVarietiesSelected,
+      };
     });
   };
 
@@ -352,18 +353,32 @@ const LacDuongMap = () => {
 
   // points.varieties.id
 
+  // lọc tọa độ
   const filterLocation =
     dist && dist.points
       ? dist.points
           .filter((item) =>
-            item.varieties.some(
-              (variety) => variety.id === selected.varietiesSelected // hoa hồng
+            item.varieties.some((variety) =>
+              selected.varietiesSelected.includes(variety.id)
             )
           )
           .map((item) => item.location)
       : [];
 
-  console.log(filterLocation);
+  // lọc hình ảnh
+  const accumulatedImageUrls = menu.listVariety.flatMap((variety) =>
+    selected.varietiesSelected.includes(variety.id) ? variety.images : []
+  );
+
+  if (accumulatedImageUrls.length > 0) {
+    accumulatedImageUrls.forEach((imageUrl) => {
+      console.log(imageUrl);
+    });
+  } else {
+    console.log("Chưa chọn nên null");
+  }
+
+  // console.log(filterLocation);
   // console.log(selected.varietiesSelected);
 
   return (
@@ -543,10 +558,14 @@ const LacDuongMap = () => {
                 <Marker
                   key={index}
                   position={[item.lat, item.lng]}
-                  // icon={createCustomIcon(item.image)}
                   icon={
                     new L.Icon({
-                      iconUrl: roseIcon,
+                      iconUrl:
+                        accumulatedImageUrls.length > 0
+                          ? accumulatedImageUrls[
+                              index % accumulatedImageUrls.length
+                            ]
+                          : "",
                       iconSize: [41, 41],
                       iconAnchor: [12, 41],
                       popupAnchor: [1, -34],
