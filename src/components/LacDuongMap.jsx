@@ -113,7 +113,6 @@ const LacDuongMap = () => {
     }
     let node = findNodeById(menu.treePlace, event.target.options.id);
     let listSelected = event.target.options.placesSelected;
-
     if (node && !node.disabled) {
       if (node.type === WARD) {
         handleCheckPlace(null, node.id);
@@ -353,30 +352,55 @@ const LacDuongMap = () => {
 
   // points.varieties.id
 
-  // lọc tọa độ
-  const filterLocation =
-    dist && dist.points
-      ? dist.points
-          .filter((item) =>
+  // // lọc tọa độ
+  // const filterLocation =
+  //   dist && dist.points
+  //     ? dist.points
+  //         .filter((item) =>
+  //           item.varieties.some((variety) =>
+  //             selected.varietiesSelected.includes(variety.id)
+  //           )
+  //         )
+  //         .map((item) => item.location)
+  //     : [];
+
+  // // lọc hình ảnh
+  // const selectedImageUrls = menu.listVariety.flatMap((variety) =>
+  //   selected.varietiesSelected.includes(variety.id) ? variety.images : []
+  // );
+
+  // if (selectedImageUrls.length > 0) {
+  //   selectedImageUrls.map((imageUrl, index) => {
+  //     console.log(index);
+  //     console.log(imageUrl);
+  //   });
+  // } else {
+  //   console.log("Chưa chọn nên null");
+  // }
+  // gộm hàm
+  const filterLocationAndImages = () => {
+    const filteredPoints =
+      dist && dist.points
+        ? dist.points.filter((item) =>
             item.varieties.some((variety) =>
               selected.varietiesSelected.includes(variety.id)
             )
           )
-          .map((item) => item.location)
-      : [];
+        : [];
 
-  // lọc hình ảnh
-  const accumulatedImageUrls = menu.listVariety.flatMap((variety) =>
-    selected.varietiesSelected.includes(variety.id) ? variety.images : []
-  );
+    const filteredLocations = filteredPoints.map((item) => item.location);
 
-  if (accumulatedImageUrls.length > 0) {
-    accumulatedImageUrls.forEach((imageUrl) => {
-      console.log(imageUrl);
-    });
-  } else {
-    console.log("Chưa chọn nên null");
-  }
+    const selectedImageUrls = menu.listVariety.flatMap((variety) =>
+      selected.varietiesSelected.includes(variety.id) ? variety.images : []
+    );
+
+    return {
+      locations: filteredLocations,
+      images: selectedImageUrls,
+    };
+  };
+
+  const { locations, images } = filterLocationAndImages();
 
   // console.log(filterLocation);
   // console.log(selected.varietiesSelected);
@@ -552,27 +576,53 @@ const LacDuongMap = () => {
               />
             )}
             {/* hiểu thị icon */}
-            {dist &&
-              mapType === 21 &&
-              filterLocation.map((item, index) => (
-                <Marker
-                  key={index}
-                  position={[item.lat, item.lng]}
-                  icon={
-                    new L.Icon({
-                      iconUrl:
-                        accumulatedImageUrls.length > 0
-                          ? accumulatedImageUrls[
-                              index % accumulatedImageUrls.length
-                            ]
-                          : "",
-                      iconSize: [41, 41],
-                      iconAnchor: [12, 41],
-                      popupAnchor: [1, -34],
-                    })
-                  }
-                />
-              ))}
+            {dist && mapType === 21 && isLoadAll
+              ? // <HeatmapLayer
+                //   points={dist.points.map((point) => {
+                //     let location = {
+                //       lat: point.location.lat,
+                //       lng: point.location.lng,
+                //     };
+                //     return location;
+                //   })}
+                //   longitudeExtractor={(m) => m.lng}
+                //   latitudeExtractor={(m) => m.lat}
+                //   intensityExtractor={(m) => m.value}
+                //   maxZoom={11}
+                //   blur={20}
+                //   radius={14}
+                // />
+                dist.points.map((point, index) => (
+                  <Marker
+                    key={index}
+                    position={[point.location.lat, point.location.lng]}
+                    icon={
+                      new L.Icon({
+                        iconUrl: roseIcon,
+                        iconSize: [41, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                      })
+                    }
+                  />
+                ))
+              : locations.map((item, index) => (
+                  <Marker
+                    key={index}
+                    position={[item.lat, item.lng]}
+                    icon={
+                      new L.Icon({
+                        iconUrl:
+                          images.length > 0
+                            ? images[index % images.length]
+                            : "",
+                        iconSize: [41, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                      })
+                    }
+                  />
+                ))}
             <GeoJSON
               key={selected.typePlaceSelected}
               data={menu[selected.typePlaceSelected]}
