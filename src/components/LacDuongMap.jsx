@@ -402,8 +402,42 @@ const LacDuongMap = () => {
 
   const { locations, images } = filterLocationAndImages();
 
-  // console.log(filterLocation);
+  // lọc hình ảnh
+  const ImageUrlsAll =
+    dist && dist.points
+      ? dist.points.map((point) => {
+          return [point.location, point.varieties];
+        })
+      : [];
+
+  console.log(ImageUrlsAll);
+
   // console.log(selected.varietiesSelected);
+
+  // Tìm tọa độ và hình ảnh tương ứng
+  const findLocationAndImages = () => {
+    const filteredPoints =
+      dist && dist.points
+        ? dist.points.filter((item) =>
+            item.varieties.some((variety) =>
+              selected.varietiesSelected.includes(variety.id)
+            )
+          )
+        : [];
+
+    const filteredLocations = filteredPoints.map((item) => item.location);
+
+    const selectedImageUrls = menu.listVariety.flatMap((variety) =>
+      selected.varietiesSelected.includes(variety.id) ? variety.images : []
+    );
+
+    return {
+      location: filteredLocations,
+      image: selectedImageUrls,
+    };
+  };
+
+  const { location, image } = findLocationAndImages();
 
   return (
     <div className="text-center bg-light">
@@ -577,22 +611,7 @@ const LacDuongMap = () => {
             )}
             {/* hiểu thị icon */}
             {dist && mapType === 21 && isLoadAll
-              ? // <HeatmapLayer
-                //   points={dist.points.map((point) => {
-                //     let location = {
-                //       lat: point.location.lat,
-                //       lng: point.location.lng,
-                //     };
-                //     return location;
-                //   })}
-                //   longitudeExtractor={(m) => m.lng}
-                //   latitudeExtractor={(m) => m.lat}
-                //   intensityExtractor={(m) => m.value}
-                //   maxZoom={11}
-                //   blur={20}
-                //   radius={14}
-                // />
-                dist.points.map((point, index) => (
+              ? dist.points.map((point, index) => (
                   <Marker
                     key={index}
                     position={[point.location.lat, point.location.lng]}
