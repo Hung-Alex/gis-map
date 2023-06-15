@@ -351,33 +351,7 @@ const LacDuongMap = () => {
   };
 
   // points.varieties.id
-
-  // // lọc tọa độ
-  // const filterLocation =
-  //   dist && dist.points
-  //     ? dist.points
-  //         .filter((item) =>
-  //           item.varieties.some((variety) =>
-  //             selected.varietiesSelected.includes(variety.id)
-  //           )
-  //         )
-  //         .map((item) => item.location)
-  //     : [];
-
-  // // lọc hình ảnh
-  // const selectedImageUrls = menu.listVariety.flatMap((variety) =>
-  //   selected.varietiesSelected.includes(variety.id) ? variety.images : []
-  // );
-
-  // if (selectedImageUrls.length > 0) {
-  //   selectedImageUrls.map((imageUrl, index) => {
-  //     console.log(index);
-  //     console.log(imageUrl);
-  //   });
-  // } else {
-  //   console.log("Chưa chọn nên null");
-  // }
-  // gộm hàm
+  // Hiển thị tọa độ và hình ảnh khi nhấn vào loại
   const filterLocationAndImages = () => {
     const filteredPoints =
       dist && dist.points
@@ -403,41 +377,69 @@ const LacDuongMap = () => {
   const { locations, images } = filterLocationAndImages();
 
   // lọc hình ảnh
+  let locationArray = [];
+  let varietiesArray = [];
+
   const ImageUrlsAll =
     dist && dist.points
       ? dist.points.map((point) => {
-          return [point.location, point.varieties];
+          const location = point.location;
+          locationArray.push(location);
+
+          const varieties = point.varieties.map((item) => {
+            if (item.id) {
+              // console.log(item.id);
+              return item.id;
+            }
+          });
+          varietiesArray.push(varieties);
+
+          return [location, varieties];
         })
       : [];
 
-  console.log(ImageUrlsAll);
+  // console.log(locationArray);
+  // console.log(varietiesArray);
 
   // console.log(selected.varietiesSelected);
 
   // Tìm tọa độ và hình ảnh tương ứng
-  const findLocationAndImages = () => {
-    const filteredPoints =
-      dist && dist.points
-        ? dist.points.filter((item) =>
-            item.varieties.some((variety) =>
-              selected.varietiesSelected.includes(variety.id)
-            )
-          )
-        : [];
+  const findCoordinateImages = () => {
+    const coordi = [];
+    const image = [];
 
-    const filteredLocations = filteredPoints.map((item) => item.location);
+    dist &&
+      dist.points.forEach((point) => {
+        const { lng, lat } = point.location;
 
-    const selectedImageUrls = menu.listVariety.flatMap((variety) =>
-      selected.varietiesSelected.includes(variety.id) ? variety.images : []
-    );
+        if (point.varieties && point.varieties.length > 0) {
+          coordi.push({ lng, lat });
 
-    return {
-      location: filteredLocations,
-      image: selectedImageUrls,
-    };
+          point.varieties.forEach((variety) => {
+            const varietyId = variety.id;
+            const foundVariety = menu.listVariety.find(
+              (item) => item.id === varietyId
+            );
+
+            if (
+              foundVariety &&
+              foundVariety.images &&
+              foundVariety.images.length > 0
+            ) {
+              image.push(foundVariety.images[0]);
+            }
+          });
+        }
+      });
+
+    const combinedArray = coordi.map((coord, index) => [coord, image[index]]);
+
+    return combinedArray;
   };
+  // console.log(findCoordinateImages());
+  const coordinateImagesAll = findCoordinateImages();
 
-  const { location, image } = findLocationAndImages();
+  console.log(coordinateImagesAll);
 
   return (
     <div className="text-center bg-light">
@@ -611,13 +613,16 @@ const LacDuongMap = () => {
             )}
             {/* hiểu thị icon */}
             {dist && mapType === 21 && isLoadAll
-              ? dist.points.map((point, index) => (
+              ? locationArray.map((coord, index) => (
                   <Marker
                     key={index}
-                    position={[point.location.lat, point.location.lng]}
+                    position={[coord.lat, coord.lng]}
                     icon={
                       new L.Icon({
-                        iconUrl: roseIcon,
+                        iconUrl:
+                          coordinateImagesAll.length > 0
+                            ? coordinateImagesAll[index][1]
+                            : "",
                         iconSize: [41, 41],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
@@ -661,3 +666,4 @@ const LacDuongMap = () => {
   );
 };
 export default LacDuongMap;
+// [12.286388234394906,108.5723565927364]
