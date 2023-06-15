@@ -13,7 +13,8 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
-// import locationIcon from "./images/location.png";
+import locationIcon from "./images/location.png";
+import nullIcon from "./images/nullIcon.png";
 import roseIcon from "./images/rose.png";
 import { HeatmapLayer } from "react-leaflet-heatmap-layer-v3";
 import CusTreeView from "./Layout/test";
@@ -617,24 +618,47 @@ const LacDuongMap = () => {
               />
             )}
             {/* hiểu thị icon */}
-            {dist &&
-            mapType === 21 &&
-            isLoadAll &&
-            coordinateImagesAll.length > 0
-              ? coordinateImagesAll.map((coord, index) => (
+            {dist && mapType === 21 && isLoadAll && ImageUrlsAll.length > 0
+              ? ImageUrlsAll.map((coord, index) => (
                   <Marker
                     key={index}
                     position={[coord[0].lat, coord[0].lng]}
                     icon={
                       new L.Icon({
-                        iconUrl:
-                          icons.length > 0 ? icons[index % icons.length] : "",
+                        iconUrl: locationIcon,
                         iconSize: [41, 41],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
                       })
                     }
-                  />
+                  >
+                    <Popup>
+                      {coord[1].length > 0 ? (
+                        coord[1].map((imageUrl, i) => (
+                          <img
+                            key={i}
+                            src={imageUrl}
+                            alt={`Icon ${i + 1}`}
+                            style={{
+                              width: "41px",
+                              height: "41px",
+                              margin: "6px",
+                            }}
+                          />
+                        ))
+                      ) : (
+                        <img
+                          src={nullIcon}
+                          alt="Null Icon"
+                          style={{
+                            width: "41px",
+                            height: "41px",
+                            margin: "6px",
+                          }}
+                        />
+                      )}
+                    </Popup>
+                  </Marker>
                 ))
               : locations.map((item, index) => (
                   <Marker
