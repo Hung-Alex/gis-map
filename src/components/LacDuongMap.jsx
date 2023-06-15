@@ -377,29 +377,30 @@ const LacDuongMap = () => {
   const { locations, images } = filterLocationAndImages();
 
   // lọc hình ảnh
-  let locationArray = [];
-  let varietiesArray = [];
-
   const ImageUrlsAll =
     dist && dist.points
       ? dist.points.map((point) => {
           const location = point.location;
-          locationArray.push(location);
 
           const varieties = point.varieties.map((item) => {
             if (item.id) {
-              // console.log(item.id);
-              return item.id;
+              const foundVariety = menu.listVariety.find(
+                (varietiesId) => varietiesId.id === item.id
+              );
+              if (
+                foundVariety &&
+                foundVariety.images &&
+                foundVariety.images.length > 0
+              ) {
+                return foundVariety.images[0];
+              }
             }
           });
-          varietiesArray.push(varieties);
-
           return [location, varieties];
         })
       : [];
 
-  // console.log(locationArray);
-  // console.log(varietiesArray);
+  console.log(ImageUrlsAll);
 
   // console.log(selected.varietiesSelected);
 
@@ -430,6 +431,7 @@ const LacDuongMap = () => {
             }
           });
         }
+        // console.log("image: ", image);
       });
 
     const combinedArray = coordi.map((coord, index) => [coord, image[index]]);
@@ -439,7 +441,10 @@ const LacDuongMap = () => {
   // console.log(findCoordinateImages());
   const coordinateImagesAll = findCoordinateImages();
 
-  console.log(coordinateImagesAll);
+  // console.log(coordinateImagesAll);
+  const coordinates = coordinateImagesAll.map((item) => item[0]);
+  const icons = coordinateImagesAll.map((item) => item[1]);
+  // console.log(icons);
 
   return (
     <div className="text-center bg-light">
@@ -612,17 +617,18 @@ const LacDuongMap = () => {
               />
             )}
             {/* hiểu thị icon */}
-            {dist && mapType === 21 && isLoadAll
-              ? locationArray.map((coord, index) => (
+            {dist &&
+            mapType === 21 &&
+            isLoadAll &&
+            coordinateImagesAll.length > 0
+              ? coordinateImagesAll.map((coord, index) => (
                   <Marker
                     key={index}
-                    position={[coord.lat, coord.lng]}
+                    position={[coord[0].lat, coord[0].lng]}
                     icon={
                       new L.Icon({
                         iconUrl:
-                          coordinateImagesAll.length > 0
-                            ? coordinateImagesAll[index][1]
-                            : "",
+                          icons.length > 0 ? icons[index % icons.length] : "",
                         iconSize: [41, 41],
                         iconAnchor: [12, 41],
                         popupAnchor: [1, -34],
