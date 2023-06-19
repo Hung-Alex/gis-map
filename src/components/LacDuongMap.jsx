@@ -59,6 +59,11 @@ const LacDuongMap = () => {
   const [dist, setDist] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const [mapType, setMapType] = useState(20);
+ 
+  //==================================Hover Map==========================================
+  const [hoverLayerMap, setHoverLayerMap] = useState(false);
+  const [infoLayerHover, setInfoLayerHover] = useState([]);
+  //============================================================================
 
   // chọn loại bản đồ
   const handleChangeMapType = (event) => {
@@ -103,10 +108,32 @@ const LacDuongMap = () => {
     color: "black",
     weight: 0.1,
   };
+  const nullStyle = {
+    fillColor: "white",
+    fillOpacity: 0.4,
+    color: "black",
+    weight: 0.6,
+  };
 
   const printMesssageToConsole = () => {
     console.log("Clicked");
   };
+
+  //======================xử lý hover vào layer==========================================
+  const handlerHoverLayer = (event) => {
+    let node = findNodeById(menu.treePlace, event.target.options.id);
+    let listSelected = event.target.options.placesSelected;
+
+    console.log("hover dang chonj", node);
+    console.log("cay dang chon", selected.varietiesSelected);
+    // console.log("danh sach cay trong", menu.listVariety);
+    // console.log("all dan chon", isLoadAll);
+
+    console.log("khu vuc dang chon", selected.placesSelected);
+    console.log("loai khu vuc dang chon", event.target.options.id);
+  };
+
+  //================================================================
 
   const handlerGetLocation = (event) => {
     if (isLoadAll) {
@@ -174,7 +201,22 @@ const LacDuongMap = () => {
         varieties: selected.varietiesSelected,
         places: locationId.split(" "),
       });
+
+      //  console.log("chua loc ",result);
+
+      // const filteredPoints = result.points.filter((point) => {
+      //   // Kiểm tra xem point.varieties có chứa bất kỳ ID nào trong filterByIds hay không
+      //   return point.varieties.some((variety) =>
+      //     selected.varietiesSelected.includes(variety.id)
+      //   );
+      // });
+
+      // console.log("đã lọc ", filteredPoints);
+
       var area = Number(result.totalArea);
+      console.log("id huyen", locationId);
+
+      console.log("area huyen", area);
 
       return {
         fillColor: getColor(area),
@@ -197,8 +239,38 @@ const LacDuongMap = () => {
       };
     }
   }
+
+  async function getDynamicStyleProvince(locationsId) {
+    console.log("place gui len cua tinh",locationsId);
+    try {
+      var result = await getDist({
+        varieties: selected.varietiesSelected,
+        places: locationsId,
+      });
+      var area = Number(result.totalArea);
+      return {
+        fillColor: getColor(area),
+        weight: 2,
+        opacity: 1,
+        color: "white",
+        dashArray: "3",
+        fillOpacity: 0.7,
+      };
+    } catch (error) {
+      console.log(error);
+
+      return {
+        fillColor: getColor(0), // Giá trị mặc định nếu có lỗi
+        weight: 2,
+        opacity: 1,
+        color: "white",
+        dashArray: "3",
+        fillOpacity: 0.7,
+      };
+    }
+  }
   //================================================================
-  const onPlace = async (place, layer) => {
+  const onPlace = async (place, layer, event) => {
     const name = place.properties.name;
     layer.bindTooltip(name, { className: "my-tooltip" });
     layer.options.fillColor = mainMapColor;
@@ -207,9 +279,74 @@ const LacDuongMap = () => {
     layer.options.placesSelected = selected.placesSelected;
     layer.options.itemSelected = itemsPlace;
     var dynamicStyle = disableStyle;
-    if (!props.disabled) {
-      dynamicStyle = await getDynamicStyle(layer.options.id);
+    
+    var provinceOfPlaceSelected =[];
+
+    if(selected.placesSelected.length > 0)
+    {// lọc ra các tỉnh  đã được chọn 
+      for(let i = 0; i < selected.placesSelected.length; i++){
+        let node = findNodeById(menu.treePlace, selected.placesSelected[i]);
+        if(!provinceOfPlaceSelected.includes(node?.parentId))
+        {
+          provinceOfPlaceSelected.push(node?.parentId);
+        }
+      }
     }
+   
+    if(selected.typePlaceSelected ==PROVINCE)//tỉnh
+    {
+      if(selected.placesSelected.length ===0)//nếu chưa chọn cái gì hết thì hiển thị  tất cả 
+      {
+        dynamicStyle = await getDynamicStyle(layer.options.id);// lấy theo của tỉnh của từng layer
+      }else{//nếu có chọn địa điểm 
+        dynamicStyle = await getDynamicStyleProvince(selected.placesSelected);//gửi lên những địa điểm đang được chọn
+      }
+    }
+    if(selected.typePlaceSelected ==DISTRICT)// Quận Huyện
+    {
+      console.log("id cua huyen loc",layer.options.id);
+      if(selected.placesSelected.length===0){// trường hợp mà chưa chọn địa điểm gì hết
+        if (!props.disabled) {
+          let node = findNodeById(menu.treePlace, layer.options.id);// tìm node của huyện đó và lấy ra những xã phường của huyện quận đó
+          var childrens=node.children.map(({id})=>id);// tách hết các xã /phường ra thành 1 mảng theo id 
+          dynamicStyle = await getDynamicStyleProvince(childrens);// gửi những điểm thuộc xã đó 
+        }
+      }
+      else{// trường hợp chọn địa điểm 
+        if(provinceOfPlaceSelected?.includes(layer.options.id)) // kiểm tra xem địa điểm đó có thuộc cái điểm đang chọn hay ko 
+        {
+          let node = findNodeById(menu.treePlace, layer.options.id);// lấy node cha
+          var filterLocationIsSelectedOfDistrict =selected.placesSelected.filter(item => node.children.some(obj=>obj.id === item));// lọc địa điểm đã được chọn ra 
+          console.log("các điểm huyện quận đã lọc",filterLocationIsSelectedOfDistrict);
+          dynamicStyle = await getDynamicStyleProvince(filterLocationIsSelectedOfDistrict);
+        }
+      }
+    }
+    if(selected.typePlaceSelected ==WARD )// Xã/phường 
+    {
+      if (selected.placesSelected.length === 0) {
+        if (!props.disabled) {
+          dynamicStyle = await getDynamicStyle(layer.options.id);
+        }
+      } else {
+        if (!props.disabled && selected.placesSelected.includes(props.id)) {
+          dynamicStyle = await getDynamicStyle(layer.options.id);
+        } else {
+          // if (!props.disabled) {
+          //   dynamicStyle = await getDynamicStyle(layer.options.id);
+          // }
+        }
+      }
+    }
+
+
+
+    // console.log("loai khu vuc dang duoc chon",selected.typePlaceSelected);
+    // let node = findNodeById(menu.treePlace, props.id);
+    // console.log("loai khu vuc dang chon la tinh",node?.type);
+   
+      
+    
 
     if (itemsPlace && itemsPlace.includes(props.id)) {
       layer.setStyle(selectedStyle);
@@ -221,6 +358,7 @@ const LacDuongMap = () => {
     layer.on({
       click: handlerGetLocation,
       dblclick: handleGetChildrenPlace,
+      mouseover: handlerHoverLayer,
     });
   };
 
@@ -405,47 +543,7 @@ const LacDuongMap = () => {
 
   // console.log(selected.varietiesSelected);
 
-  // Tìm tọa độ và hình ảnh tương ứng
-  const findCoordinateImages = () => {
-    const coordi = [];
-    const image = [];
 
-    dist &&
-      dist.points.forEach((point) => {
-        const { lng, lat } = point.location;
-
-        if (point.varieties && point.varieties.length > 0) {
-          coordi.push({ lng, lat });
-
-          point.varieties.forEach((variety) => {
-            const varietyId = variety.id;
-            const foundVariety = menu.listVariety.find(
-              (item) => item.id === varietyId
-            );
-
-            if (
-              foundVariety &&
-              foundVariety.images &&
-              foundVariety.images.length > 0
-            ) {
-              image.push(foundVariety.images[0]);
-            }
-          });
-        }
-        // console.log("image: ", image);
-      });
-
-    const combinedArray = coordi.map((coord, index) => [coord, image[index]]);
-
-    return combinedArray;
-  };
-  // console.log(findCoordinateImages());
-  const coordinateImagesAll = findCoordinateImages();
-
-  // console.log(coordinateImagesAll);
-  const coordinates = coordinateImagesAll.map((item) => item[0]);
-  const icons = coordinateImagesAll.map((item) => item[1]);
-  // console.log(icons);
 
   return (
     <div className="text-center bg-light">
@@ -695,5 +793,6 @@ const LacDuongMap = () => {
     </div>
   );
 };
+
 export default LacDuongMap;
 // [12.286388234394906,108.5723565927364]
