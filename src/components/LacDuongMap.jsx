@@ -59,7 +59,7 @@ const LacDuongMap = () => {
   const [dist, setDist] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const [mapType, setMapType] = useState(20);
- 
+
   //==================================Hover Map==========================================
   const [hoverLayerMap, setHoverLayerMap] = useState(false);
   const [infoLayerHover, setInfoLayerHover] = useState([]);
@@ -241,7 +241,7 @@ const LacDuongMap = () => {
   }
 
   async function getDynamicStyleProvince(locationsId) {
-    console.log("place gui len cua tinh",locationsId);
+    console.log("place gui len cua tinh", locationsId);
     try {
       var result = await getDist({
         varieties: selected.varietiesSelected,
@@ -279,51 +279,60 @@ const LacDuongMap = () => {
     layer.options.placesSelected = selected.placesSelected;
     layer.options.itemSelected = itemsPlace;
     var dynamicStyle = disableStyle;
-    
-    var provinceOfPlaceSelected =[];
 
-    if(selected.placesSelected.length > 0)
-    {// lọc ra các tỉnh  đã được chọn 
-      for(let i = 0; i < selected.placesSelected.length; i++){
+    var provinceOfPlaceSelected = [];
+
+    if (selected.placesSelected.length > 0) {
+      // lọc ra các tỉnh  đã được chọn
+      for (let i = 0; i < selected.placesSelected.length; i++) {
         let node = findNodeById(menu.treePlace, selected.placesSelected[i]);
-        if(!provinceOfPlaceSelected.includes(node?.parentId))
-        {
+        if (!provinceOfPlaceSelected.includes(node?.parentId)) {
           provinceOfPlaceSelected.push(node?.parentId);
         }
       }
     }
-   
-    if(selected.typePlaceSelected ==PROVINCE)//tỉnh
-    {
-      if(selected.placesSelected.length ===0)//nếu chưa chọn cái gì hết thì hiển thị  tất cả 
-      {
-        dynamicStyle = await getDynamicStyle(layer.options.id);// lấy theo của tỉnh của từng layer
-      }else{//nếu có chọn địa điểm 
-        dynamicStyle = await getDynamicStyleProvince(selected.placesSelected);//gửi lên những địa điểm đang được chọn
+
+    if (selected.typePlaceSelected == PROVINCE) {
+      //tỉnh
+      if (selected.placesSelected.length === 0) {
+        //nếu chưa chọn cái gì hết thì hiển thị  tất cả
+        dynamicStyle = await getDynamicStyle(layer.options.id); // lấy theo của tỉnh của từng layer
+      } else {
+        //nếu có chọn địa điểm
+        dynamicStyle = await getDynamicStyleProvince(selected.placesSelected); //gửi lên những địa điểm đang được chọn
       }
     }
-    if(selected.typePlaceSelected ==DISTRICT)// Quận Huyện
-    {
-      console.log("id cua huyen loc",layer.options.id);
-      if(selected.placesSelected.length===0){// trường hợp mà chưa chọn địa điểm gì hết
+    if (selected.typePlaceSelected == DISTRICT) {
+      // Quận Huyện
+      console.log("id cua huyen loc", layer.options.id);
+      if (selected.placesSelected.length === 0) {
+        // trường hợp mà chưa chọn địa điểm gì hết
         if (!props.disabled) {
-          let node = findNodeById(menu.treePlace, layer.options.id);// tìm node của huyện đó và lấy ra những xã phường của huyện quận đó
-          var childrens=node.children.map(({id})=>id);// tách hết các xã /phường ra thành 1 mảng theo id 
-          dynamicStyle = await getDynamicStyleProvince(childrens);// gửi những điểm thuộc xã đó 
+          let node = findNodeById(menu.treePlace, layer.options.id); // tìm node của huyện đó và lấy ra những xã phường của huyện quận đó
+          var childrens = node.children.map(({ id }) => id); // tách hết các xã /phường ra thành 1 mảng theo id
+          dynamicStyle = await getDynamicStyleProvince(childrens); // gửi những điểm thuộc xã đó
         }
-      }
-      else{// trường hợp chọn địa điểm 
-        if(provinceOfPlaceSelected?.includes(layer.options.id)) // kiểm tra xem địa điểm đó có thuộc cái điểm đang chọn hay ko 
-        {
-          let node = findNodeById(menu.treePlace, layer.options.id);// lấy node cha
-          var filterLocationIsSelectedOfDistrict =selected.placesSelected.filter(item => node.children.some(obj=>obj.id === item));// lọc địa điểm đã được chọn ra 
-          console.log("các điểm huyện quận đã lọc",filterLocationIsSelectedOfDistrict);
-          dynamicStyle = await getDynamicStyleProvince(filterLocationIsSelectedOfDistrict);
+      } else {
+        // trường hợp chọn địa điểm
+        if (provinceOfPlaceSelected?.includes(layer.options.id)) {
+          // kiểm tra xem địa điểm đó có thuộc cái điểm đang chọn hay ko
+          let node = findNodeById(menu.treePlace, layer.options.id); // lấy node cha
+          var filterLocationIsSelectedOfDistrict =
+            selected.placesSelected.filter((item) =>
+              node.children.some((obj) => obj.id === item)
+            ); // lọc địa điểm đã được chọn ra
+          console.log(
+            "các điểm huyện quận đã lọc",
+            filterLocationIsSelectedOfDistrict
+          );
+          dynamicStyle = await getDynamicStyleProvince(
+            filterLocationIsSelectedOfDistrict
+          );
         }
       }
     }
-    if(selected.typePlaceSelected ==WARD )// Xã/phường 
-    {
+    if (selected.typePlaceSelected == WARD) {
+      // Xã/phường
       if (selected.placesSelected.length === 0) {
         if (!props.disabled) {
           dynamicStyle = await getDynamicStyle(layer.options.id);
@@ -339,14 +348,9 @@ const LacDuongMap = () => {
       }
     }
 
-
-
     // console.log("loai khu vuc dang duoc chon",selected.typePlaceSelected);
     // let node = findNodeById(menu.treePlace, props.id);
     // console.log("loai khu vuc dang chon la tinh",node?.type);
-   
-      
-    
 
     if (itemsPlace && itemsPlace.includes(props.id)) {
       layer.setStyle(selectedStyle);
@@ -543,8 +547,6 @@ const LacDuongMap = () => {
 
   // console.log(selected.varietiesSelected);
 
-
-
   return (
     <div className="text-center bg-light">
       <button className="menu-btn" onClick={handleShowMenu}>
@@ -697,84 +699,71 @@ const LacDuongMap = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* hiển thị các điểm nhiệt */}
-            {dist && mapType === 20 && (
-              <HeatmapLayer
-                points={dist.points.map((point) => {
-                  let location = {
-                    lat: point.location.lat,
-                    lng: point.location.lng,
-                  };
-                  return location;
-                })}
-                longitudeExtractor={(m) => m.lng}
-                latitudeExtractor={(m) => m.lat}
-                intensityExtractor={(m) => m.value}
-                maxZoom={11}
-                blur={20}
-                radius={14}
-              />
-            )}
-            {/* hiểu thị icon */}
-            {dist && mapType === 21 && isLoadAll && ImageUrlsAll.length > 0
-              ? ImageUrlsAll.map((coord, index) => (
-                  <Marker
-                    key={index}
-                    position={[coord[0].lat, coord[0].lng]}
-                    icon={
-                      new L.Icon({
-                        iconUrl: locationIcon,
-                        iconSize: [41, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34],
-                      })
-                    }
-                  >
-                    <Popup>
-                      {coord[1].length > 0 ? (
-                        coord[1].map((imageUrl, i) => (
-                          <img
-                            key={i}
-                            src={imageUrl}
-                            alt={`Icon ${i + 1}`}
-                            style={{
-                              width: "41px",
-                              height: "41px",
-                              margin: "6px",
-                            }}
-                          />
-                        ))
-                      ) : (
-                        <img
-                          src={nullIcon}
-                          alt="Null Icon"
-                          style={{
-                            width: "41px",
-                            height: "41px",
-                            margin: "6px",
-                          }}
-                        />
-                      )}
-                    </Popup>
-                  </Marker>
-                ))
-              : locations.map((item, index) => (
-                  <Marker
-                    key={index}
-                    position={[item.lat, item.lng]}
-                    icon={
-                      new L.Icon({
-                        iconUrl:
-                          images.length > 0
-                            ? images[index % images.length]
-                            : "",
-                        iconSize: [41, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34],
-                      })
-                    }
+            {/* Hiển thị các điểm nhiệt hoặc icon */}
+            {dist && (
+              <>
+                {mapType === 20 && (
+                  <HeatmapLayer
+                    points={dist.points.map((point) => {
+                      let location = {
+                        lat: point.location.lat,
+                        lng: point.location.lng,
+                      };
+                      return location;
+                    })}
+                    longitudeExtractor={(m) => m.lng}
+                    latitudeExtractor={(m) => m.lat}
+                    intensityExtractor={(m) => m.value}
+                    maxZoom={11}
+                    blur={20}
+                    radius={14}
                   />
-                ))}
+                )}
+                {mapType === 21 && ImageUrlsAll.length > 0
+                  ? ImageUrlsAll.map((coord, index) => (
+                      <Marker
+                        key={index}
+                        position={[coord[0].lat, coord[0].lng]}
+                        icon={
+                          new L.Icon({
+                            iconUrl: locationIcon,
+                            iconSize: [41, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                          })
+                        }
+                      >
+                        <Popup>
+                          {coord[1].length > 0 ? (
+                            coord[1].map((imageUrl, i) => (
+                              <img
+                                key={i}
+                                src={imageUrl}
+                                alt={`Icon ${i + 1}`}
+                                style={{
+                                  width: "41px",
+                                  height: "41px",
+                                  margin: "6px",
+                                }}
+                              />
+                            ))
+                          ) : (
+                            <img
+                              src={nullIcon}
+                              alt="Null Icon"
+                              style={{
+                                width: "41px",
+                                height: "41px",
+                                margin: "6px",
+                              }}
+                            />
+                          )}
+                        </Popup>
+                      </Marker>
+                    ))
+                  : null}
+              </>
+            )}
             <GeoJSON
               key={selected.typePlaceSelected}
               data={menu[selected.typePlaceSelected]}
