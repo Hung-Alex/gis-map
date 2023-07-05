@@ -63,6 +63,7 @@ const LacDuongMap = () => {
   //==================================Hover Map==========================================
   const [hoverLayerMap, setHoverLayerMap] = useState(false);
   const [infoLayerHover, setInfoLayerHover] = useState([]);
+  const [layerKey, setLayerKey] = useState(0);
   //============================================================================
 
   // chọn loại bản đồ
@@ -270,6 +271,7 @@ const LacDuongMap = () => {
     }
   }
   //================================================================
+ 
   const onPlace = async (place, layer, event) => {
     const name = place.properties.name;
     layer.bindTooltip(name, { className: "my-tooltip" });
@@ -365,7 +367,7 @@ const LacDuongMap = () => {
       mouseover: handlerHoverLayer,
     });
   };
-
+ 
   const colorChange = (event) => {
     setColor(event.target.value);
   };
@@ -765,7 +767,7 @@ const LacDuongMap = () => {
               </>
             )}
             <GeoJSON
-              key={selected.typePlaceSelected}
+              key={`${selected.typePlaceSelected}-${selected.varietiesSelected}-${selected.placesSelected}`}
               data={menu[selected.typePlaceSelected]}
               onEachFeature={onPlace}
             />
@@ -775,7 +777,14 @@ const LacDuongMap = () => {
             </Control>
           </MapContainer>
           <Box className="area-box">
-            {dist && <p>{`Diện tích nông nghiệp: ${dist.totalArea}`}</p>}
+            {dist && (
+              <p>
+                <strong>{`Diện tích nông nghiệp: ${dist.totalArea} `}</strong>
+                <text style={{ color: "#FF2E63" }}>
+                  m<sup>2</sup>
+                </text>
+              </p>
+            )}
           </Box>
         </Box>
       </Box>
